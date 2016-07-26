@@ -1,7 +1,7 @@
 /**
-  Reid Kolaczek 2015
+  Reid Kolaczek
   
-  Code to control the minifridge launcher, and website that has the controls
+  Controls the minifridge and listens to the node server
 **/
 
 #include <SPI.h>

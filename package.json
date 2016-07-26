@@ -1,0 +1,19 @@
+{
+  "name": "minifridge",
+  "version": "1.0.0",
+  "description": "Web Component of Minifridge Launcher",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mrkolaczek/minifridge.git"
+  },
+  "author": "Reid Kolaczek",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mrkolaczek/minifridge/issues"
+  },
+  "homepage": "https://github.com/mrkolaczek/minifridge#readme"
+}
