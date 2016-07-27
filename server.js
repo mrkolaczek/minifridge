@@ -2,6 +2,16 @@ var express = require('express');
 var app = express();
 var io = require('socket.io')(app.listen(3000));
 var five = require('johnny-five');
+var passport = require('passport');
+var strategy = require('./server/setup-passport');
+var cookieParser = require('cookie-parser');
+var session = require('express-session');
+
+//Auth0 Setup
+app.use(cookieParser());
+app.use(session({ secret: '7rQMJ18B2EklEq_7wg1-oKXHoHMd-7I-NGkcMVhsbfjXe6_cJJRghn3bwuIgtY6D', resave: false,  saveUninitialized: false }));
+app.use(passport.initialize());
+app.use(passport.session());
 
 //Setting the path to static assets
 app.use(express.static(__dirname + '/web'));
@@ -10,6 +20,16 @@ app.use(express.static(__dirname + '/web'));
 app.get('/', function (res) {
     res.sendFile('/index.html')
 });
+
+// Auth0 callback handler
+app.get('/callback',
+  passport.authenticate('auth0', { failureRedirect: '/url-if-something-fails' }),
+  function(req, res) {
+    if (!req.user) {
+      throw new Error('user null');
+    }
+    res.redirect("/user");
+  });
 
 var board = new five.Board({
     repl: false
