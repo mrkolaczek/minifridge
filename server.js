@@ -1,5 +1,6 @@
 var express = require('express');
 var app = express();
+var path = require('path');
 var io = require('socket.io')(app.listen(3000));
 var five = require('johnny-five');
 var passport = require('passport');
@@ -16,11 +17,6 @@ app.use(passport.session());
 //Setting the path to static assets
 app.use(express.static(__dirname + '/web'));
 
-//Serving the static HTML file
-app.get('/', function (res) {
-    res.sendFile('/index.html')
-});
-
 // Auth0 callback handler
 app.get('/callback',
   passport.authenticate('auth0', { failureRedirect: '/url-if-something-fails' }),
@@ -30,6 +26,12 @@ app.get('/callback',
     }
     res.redirect("/user");
   });
+
+app.get('/user', function (req, res) {
+  res.sendFile(path.join(__dirname + '/web/launch.html'), {
+    user : req.user
+  });
+});
 
 var board = new five.Board({
     repl: false

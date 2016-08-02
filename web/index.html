@@ -9,18 +9,22 @@
   <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 </head>
 <body>
-  <script src="https://cdn.auth0.com/js/lock/10.0/lock.min.js"></script>
-  <script type="text/javascript">
-    var lock = new Auth0Lock('7ty0A4WNdrZdcCcsj5piTEjZF8ZKLwSS', 'mrkolaczek.auth0.com', {
-      auth: {
-        redirectUrl: 'http://localhost:3000/callback',
-        responseType: 'code',
-        params: {
-          scope: 'openid email' // Learn about scopes: https://auth0.com/docs/scopes
-        }
+<script src="https://cdn.auth0.com/js/lock/10.0/lock.min.js"></script>
+<script type="text/javascript">
+  var lock = new Auth0Lock('7ty0A4WNdrZdcCcsj5piTEjZF8ZKLwSS', 'mrkolaczek.auth0.com', {
+    auth: {
+      redirectUrl: 'http://localhost:3000/callback',
+      responseType: 'code',
+      params: {
+        scope: 'openid email' // Learn about scopes: https://auth0.com/docs/scopes
       }
-    });
-  </script>
-  <button onclick="lock.show();">Login</button>
+    }
+  });
+
+  $(document).ready(function () {
+    lock.show();
+  });
+
+</script>
 </body>
 </html>
