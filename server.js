@@ -7,6 +7,7 @@ var passport = require('passport');
 var strategy = require('./server/setup-passport');
 var cookieParser = require('cookie-parser');
 var session = require('express-session');
+var requiresLogin = require('./server/requiresLogin');
 
 //Auth0 Setup
 app.use(cookieParser());
@@ -19,7 +20,7 @@ app.use(express.static(__dirname + '/web'));
 
 // Auth0 callback handler
 app.get('/callback',
-  passport.authenticate('auth0', { failureRedirect: '/url-if-something-fails' }),
+  passport.authenticate('auth0', { failureRedirect: '/' }),
   function(req, res) {
     if (!req.user) {
       throw new Error('user null');
@@ -27,7 +28,7 @@ app.get('/callback',
     res.redirect("/user");
   });
 
-app.get('/user', function (req, res) {
+app.get('/user', requiresLogin, function (req, res) {
   res.sendFile(path.join(__dirname + '/web/launch.html'), {
     user : req.user
   });
@@ -38,45 +39,30 @@ var board = new five.Board({
 });
 
 board.on('ready', function () {
-    var speed, commands, motors;
-    motors = {
-        a: new five.Motor([3, 12]),
-        b: new five.Motor([11, 13])
+    var servo, relay;
+    servo = {
+      front: new five.servo({pin: 7, startAt: 90}),
+      back:  new five.servo({pin: 8, startAt: 90})
     };
 
-    commands = null;
-    speed = 255;
+    relay = {
+      pump: new five.relay({pin: 5, type: "NO"}),
+      valve: new five.relay({pin: 6, type: "NO"})
+    };
 
     io.on('connection', function (socket) {
-        socket.on('stop', function () {
-            motors.a.stop();
-            motors.b.stop();
-        });
+    socket.on('fire', function () {
+      servo.back.to(180);
+      board.wait(1500, function () {
+        servo.back.to(90);
+      });
 
-        socket.on('start', function () {
-            speed = 150;
-            motors.a.fwd(speed);
-            motors.b.fwd(speed);
-        });
+      servo.front.to(180);
+      board.wait(3000, function () {
+        servo.front.to(90);
+      });
 
-        socket.on('reverse', function () {
-            speed = 120;
-            motors.a.rev(speed);
-            motors.b.rev(speed);
-        });
-
-        socket.on('left', function () {
-            var aSpeed = 220;
-            var bSpeed = 50;
-            motors.a.fwd(aSpeed);
-            motors.b.rev(bSpeed);
-        });
-
-        socket.on('right', function () {
-            var aSpeed = 50;
-            var bSpeed = 220;
-            motors.a.rev(aSpeed);
-            motors.b.fwd(bSpeed);
-        });
+      relay.
     });
+  });
 });

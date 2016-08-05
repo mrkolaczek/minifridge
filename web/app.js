@@ -1,27 +1,17 @@
 var socket = io();
 
-function moveForward(){
-    socket.emit('start');
+function turnLeft(){
+    socket.emit('left');
 }
 
 function turnRight(){
     socket.emit('right');
 }
 
-function turnLeft(){
-    socket.emit('left');
+function fire(){
+    socket.emit('fire');
 }
 
-function moveReverse(){
-    socket.emit('reverse');
-}
-
-function stop(){
-    socket.emit('stop');
-}
-
-document.getElementById('forward').onclick = moveForward;
-document.getElementById('right').onclick = turnRight;
 document.getElementById('left').onclick = turnLeft;
-document.getElementById('reverse').onclick = moveReverse;
-document.getElementById('stop').onclick = stop;
+document.getElementById('right').onclick = turnRight;
+//document.getElementById('fire').onclick = fire;
