@@ -68,7 +68,7 @@ board.on('ready', function () {
         board.wait(1000, function() {
           relay.valve.open();
         });
-        
+        relay.valve.close();
       });
     });
   });
