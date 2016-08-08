@@ -62,7 +62,14 @@ board.on('ready', function () {
         servo.front.to(90);
       });
 
-      relay.
+      relay.pump.open();
+      board.wait(28000, function() {
+        relay.pump.close();
+        relay.valve.open();
+        board.wait(1000, function() {
+          relay.valve.close();
+        });
+      });
     });
   });
 });
