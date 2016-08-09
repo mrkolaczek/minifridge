@@ -39,19 +39,19 @@ var board = new five.Board({
 });
 
 board.on('ready', function () {
-    var servo, relay;
-    servo = {
-      front: new five.servo({pin: 7, startAt: 90}),
-      back:  new five.servo({pin: 8, startAt: 90})
-    };
+  var servo, relay;
+  servo = {
+    front: new five.servo({pin: 7, startAt: 90}),
+    back:  new five.servo({pin: 8, startAt: 90})
+  };
 
-    relay = {
-      pump: new five.relay({pin: 5, type: "NO"}),
-      valve: new five.relay({pin: 6, type: "NO"})
-    };
+  relay = {
+    pump: new five.relay({pin: 5, type: "NO"}),
+    valve: new five.relay({pin: 6, type: "NO"})
+  };
 
-    io.on('connection', function (socket) {
-    socket.on('fire', function () {
+  io.on('connection', function (socket) {
+    socket.on('fire', function (timeLeft) {
       servo.back.to(180);
       board.wait(1500, function () {
         servo.back.to(90);
@@ -63,7 +63,7 @@ board.on('ready', function () {
       });
 
       relay.pump.close();
-      board.wait(28000, function() {
+      board.wait(timeLeft, function() {
         relay.pump.open();
         board.wait(1000, function() {
           relay.valve.open();
