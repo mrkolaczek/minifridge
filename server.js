@@ -63,7 +63,7 @@ board.on('ready', function () {
       });
 
       relay.pump.close();
-      board.wait(timeLeft, function() {
+      board.wait((timeLeft * 1000), function() {
         relay.pump.open();
         board.wait(1000, function() {
           relay.valve.open();

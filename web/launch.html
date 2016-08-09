@@ -71,7 +71,9 @@
     
     $("#header").load("header.html");
     $("#footer").load("footer.html");
-    var distance;
+   
+    var distance, totalTime, timeLeft, timer;
+   
     $( function() {
       $("#slider-range").slider({
         range: "max",
@@ -82,9 +84,13 @@
           $("#distance").text(ui.value);
         }
       });
+      
       $("#distance").text($("#slider-range").slider("value"));
-      distance = $("#slider-range").slider("value");
-      console.log(distance);
+
+      $("slider-range").change(function () {
+        distance = this.value
+        console.log(this.value);
+      });
     });
 
     function showAlert() {
@@ -94,13 +100,10 @@
     function hideAlert() {
       $("#alert").removeClass("fade in");
     }
-
-    var totalTime = 5;
-    var timeLeft = 5;
-    var timer;
     
     function distanceToTime() {
-      //TODO create formula
+      totalTime = Math.round((distance + 31.6667) / 1.6667);
+      timeLeft = totalTime;
     }
 
     function timerId() {
@@ -122,15 +125,17 @@
 
     var socket = io.connect('http://localhost:3000');
 
-    function turnLeft(){
+    function turnLeft() {
       socket.emit('left');
     }
 
-    function turnRight(){
+    function turnRight() {
       socket.emit('right');
     }
 
-    function fire(){
+    function fire() {
+      distanceToTime();
+      console.log("total time: " + totalTime);
       socket.emit('fire', totalTime);
     }
   </script>
