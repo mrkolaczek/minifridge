@@ -1,11 +1,8 @@
 var express = require('express');
-// var app = express();
 var path = require('path');
-// var io = require('socket.io').Server(app);
 var app = require('express')();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
-
 var five = require('johnny-five');
 var passport = require('passport');
 var strategy = require('./server/setup-passport');
