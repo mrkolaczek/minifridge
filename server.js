@@ -1,7 +1,11 @@
 var express = require('express');
-var app = express();
+// var app = express();
 var path = require('path');
-var io = require('socket.io')(app.listen(3000));
+// var io = require('socket.io').Server(app);
+var app = require('express')();
+var http = require('http').Server(app);
+var io = require('socket.io')(http);
+
 var five = require('johnny-five');
 var passport = require('passport');
 var strategy = require('./server/setup-passport');
@@ -34,6 +38,17 @@ app.get('/user', requiresLogin, function (req, res) {
   });
 });
 
+http.listen(3000, function(){
+  console.log('listening on *:3000');
+});
+
+io.on('connection', function(socket){
+  console.log('a user connected');
+  socket.on('disconnect', function(){
+    console.log('user disconnected');
+  });
+});
+
 var board = new five.Board({
     repl: false
 });
@@ -51,7 +66,9 @@ board.on('ready', function () {
   };
 
   io.on('connection', function (socket) {
-    socket.on('fire', function (timeLeft) {
+    console.log('Socket IO connection established');
+    socket.on('fire', function (time) {
+      console.log('time left: ' + time);
       servo.back.to(180);
       board.wait(1500, function () {
         servo.back.to(90);
@@ -63,7 +80,7 @@ board.on('ready', function () {
       });
 
       relay.pump.close();
-      board.wait((timeLeft * 1000), function() {
+      board.wait((time * 1000), function() {
         relay.pump.open();
         board.wait(1000, function() {
           relay.valve.open();
