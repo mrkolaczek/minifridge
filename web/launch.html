@@ -60,7 +60,7 @@
     </div>
     <div class="row">
       <div class="col-xs-12">
-        <button id="fire" type="button" class="btn btn-danger btn-block btn-lg" onclick="showAlert(); timerId(); fire();">FIRE</button>
+        <button id="fire" type="button" class="btn btn-danger btn-block btn-lg" onclick="fire();">FIRE</button>
       </div>
     </div>
   </div>
@@ -132,11 +132,24 @@
       socket.emit('right');
     }
 
+    function confirmLaunch() {
+      let c = confirm("Please confirm the launch");
+      if (c == true)
+        return 1;
+      else
+        return 0;
+    }
+
     function fire() {
+      if (confirmLaunch() === 0)
+        return;
+
+      timerId();
+      showAlert();
       $('#fire').prop('disabled', true);
       distanceToTime();
       console.log("total time: " + totalTime);
-      socket.emit('fire');
+      socket.emit('fire', totalTime);
     }
   </script>
 </body>
